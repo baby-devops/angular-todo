@@ -1,0 +1,50 @@
+<nav class="navbar is-dark py-2">
+  <div class="container">
+    <div class="navbar-brand">
+      <span class="navbar-item">Angular Simple Todo List</span>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <form class="box mt-4" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <div class="field">
+      <label class="label">Task</label>
+      <div class="control">
+        <input class="input" type="text" formControlName="task" placeholder="Enter task"/>
+      </div>
+      @if (form.hasError('required', 'task') && form.get('task')?.touched) {
+        <p class="help is-danger">This field is required</p>
+      }
+    </div>
+    <div class="field">
+      <label class="label">Description</label>
+      <div class="control">
+        <textarea
+          class="textarea"
+          formControlName="description"
+          placeholder="Enter description"
+        ></textarea>
+      </div>
+    </div>
+
+    <div class="control has-text-right">
+      <input type="submit" class="button is-link" value="Add" [disabled]="form.invalid"/>
+    </div>
+  </form>
+
+  @for (task of tasks; track $index) {
+    <article class="message is-dark" [class.is-success]="task.done">
+      <div class="message-header">
+        <button class="button is-small is-dark" [class.is-success]="task.done" (click)="markDone($index)">
+          <span class="icon is-small">
+            <i class="fas fa-check"></i>
+          </span>
+        </button>
+        <p>{{ task.title }}</p>
+        <button class="delete" aria-label="delete" (click)="delete($index)"></button>
+      </div>
+      <div class="message-body">{{ task.description }}</div>
+    </article>
+  }
+</div>
