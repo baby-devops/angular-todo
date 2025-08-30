@@ -57,5 +57,5 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
-          folder: dist/angular-todo
+          folder: dist/angular-todo/browser
           token: ${{ secrets.GITHUB_TOKEN }}
