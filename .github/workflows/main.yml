@@ -12,11 +12,11 @@ jobs:
     steps:
       # Checkout repo
       - name: Checkout code
-        uses: actions/checkout
+        uses: actions/checkout@v4
 
       # Setup node.js
       - name: Setup Node.js
-        uses: actions/setup-node
+        uses: actions/setup-node@v4
         with:
           node-version: 22
 
@@ -40,10 +40,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node
+        uses: actions/setup-node@v4
         with:
           node-version: 22
 
