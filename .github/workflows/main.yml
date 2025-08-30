@@ -30,7 +30,7 @@ jobs:
 
       # Build app
       - name: Build Angular app
-        run: npm run build -- --configuration production
+        run: npm run build
 
   # Deploy to GitHub Pages
   deploy:
@@ -51,7 +51,7 @@ jobs:
         run: npm ci
 
       - name: Build project
-        run: npm run build --configuration production --base-href=/
+        run: npm run build
 
       - name: Deploy to Github Pages
         uses: peaceiris/actions-gh-pages@v4
