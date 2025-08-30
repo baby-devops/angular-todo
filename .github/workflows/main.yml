@@ -53,8 +53,9 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Deploy to Github Pages
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist/angular-todo
+          branch: gh-pages
+          folder: dist/angular-todo
+          token: ${{ secrets.GITHUB_TOKEN }}
