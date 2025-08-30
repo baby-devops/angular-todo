@@ -1,0 +1,60 @@
+name: Angular Todo List CI/CD
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout repo
+      - name: Checkout code
+        uses: actions/checkout
+
+      # Setup node.js
+      - name: Setup Node.js
+        uses: actions/setup-node
+        with:
+          node-version: 22
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # Run unit tests
+      - name: Run tests
+        run: npm test -- --watch=false --browsers=ChromeHeadless
+
+      # Build app
+      - name: Build Angular app
+        run: npm run build -- --configuration production
+
+  # Deploy to GitHub Pages
+  deploy:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout
+
+      - name: Setup Node.js
+        uses: actions/setup-node
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build --configuration production --base-href=/
+
+      - name: Deploy to Github Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist/angular-todo
