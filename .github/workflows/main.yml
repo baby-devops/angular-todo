@@ -1,9 +1,16 @@
 name: Angular Todo List CI/CD
+
 on:
   push:
-    branches: [ "master" ]
+    branches:
+      - develop
+      - qa
+      - master
   pull_request:
-    branches: [ "master" ]
+    branches:
+      - develop
+      - qa
+      - master
 
 jobs:
   build-and-test:
@@ -14,7 +21,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Setup node.js
+      # Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -24,16 +31,43 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # Run unit tests
+      # Run unit tests (always run on all branches)
       - name: Run tests
         run: npm test -- --watch=false --browsers=ChromeHeadless
 
-      # Build app
+      # Build app (only for qa and master)
       - name: Build Angular app
+        if: github.ref == 'refs/heads/qa' || github.ref == 'refs/heads/master'
         run: npm run build
 
-  # Deploy to GitHub Pages
-  deploy:
+  deploy-qa:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/qa'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+      - name: Deploy to QA (GitHub Pages QA branch)
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages-qa
+          folder: dist/angular-todo/browser
+          token: ${{ secrets.GH_PAT }}
+
+  deploy-prod:
     needs: build-and-test
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
@@ -53,7 +87,7 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Deploy to GitHub Pages
+      - name: Deploy to Production (GitHub Pages)
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages

@@ -45,6 +45,7 @@
         <button class="delete" aria-label="delete" (click)="delete($index)"></button>
       </div>
       <div class="message-body">{{ task.description }}</div>
+      <small class="is-size-7 has-text-grey">Added: {{ task.createdAt }}</small>
     </article>
   }
 </div>

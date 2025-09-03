@@ -5,6 +5,7 @@ export interface Task {
   title: string;
   description: string;
   done: boolean;
+  createdAt: string;
 }
 
 @Component({
@@ -39,7 +40,8 @@ export class App {
     this.tasks.push({
       title: this.f.task.value,
       description: this.f.description.value,
-      done: false
+      done: false,
+      createdAt: new Date().toLocaleString()
     });
     this.updateLocalStorage();
     this.form.reset();
