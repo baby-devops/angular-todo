@@ -67,8 +67,8 @@ export class App {
     const searchTerm = this.searchControl.value?.toLowerCase() || '';
     if (searchTerm) {
       filtered = filtered.filter(task =>
-        task.title.toLowerCase().includes(searchTerm) ||
-        task.description.toLowerCase().includes(searchTerm)
+        (task.title ?? '').toLowerCase().includes(searchTerm) ||
+        (task.description ?? '').toLowerCase().includes(searchTerm)
       );
     }
 

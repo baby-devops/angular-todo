@@ -14,10 +14,11 @@ describe('AppComponent (Todo List)', () => {
     fixture = TestBed.createComponent(App);
     component = fixture.componentInstance;
 
-    // Clear localStorage
-    localStorage.clear();
-
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.clear();
   });
 
   it('should create the app', () => {
@@ -38,8 +39,6 @@ describe('AppComponent (Todo List)', () => {
     expect(component.tasks[0].title).toBe('Test Task');
     expect(component.tasks[0].description).toBe('Test Description');
     expect(component.tasks[0].done).toBe(false);
-
-    localStorage.clear();
   });
 
   it('should delete a task from the list', () => {
@@ -60,8 +59,6 @@ describe('AppComponent (Todo List)', () => {
 
     component.markDone(0);
     expect(component.tasks[0].done).toBe(true);
-
-    localStorage.clear();
   });
 
   it('should save tasks to localStorage', () => {
@@ -71,8 +68,6 @@ describe('AppComponent (Todo List)', () => {
     const storedTasks = JSON.parse(localStorage.getItem('tasks') || '[]');
     expect(storedTasks.length).toBe(1);
     expect(storedTasks[0].title).toBe('Local Storage Task');
-
-    localStorage.clear();
   });
 
   it('should load tasks from localStorage', () => {
@@ -85,8 +80,6 @@ describe('AppComponent (Todo List)', () => {
 
     expect(newComponent.tasks.length).toBe(1);
     expect(newComponent.tasks[0].title).toBe('Loaded Task');
-
-    localStorage.clear();
   });
 
   it('should filter tasks by search term', () => {
@@ -114,8 +107,6 @@ describe('AppComponent (Todo List)', () => {
     // Search for something that doesn't exist
     component.searchControl.setValue('xyz');
     expect(component.filteredTasks.length).toBe(0);
-
-    localStorage.clear();
   });
 
   it('should filter tasks by status', () => {
@@ -141,8 +132,6 @@ describe('AppComponent (Todo List)', () => {
     component.filterControl.setValue('pending');
     expect(component.filteredTasks.length).toBe(1);
     expect(component.filteredTasks[0].done).toBe(false);
-
-    localStorage.clear();
   });
 
   it('should combine search and filter correctly', () => {
@@ -168,8 +157,5 @@ describe('AppComponent (Todo List)', () => {
 
     expect(component.filteredTasks.length).toBe(1);
     expect(component.filteredTasks[0].title).toBe('Finish project');
-
-    localStorage.clear();
   });
-
-})
+});
