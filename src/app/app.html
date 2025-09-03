@@ -33,7 +33,24 @@
     </div>
   </form>
 
-  @for (task of tasks; track $index) {
+  <div class="box mt-2">
+    <div class="columns is-vcentered">
+      <div class="column is-9">
+        <input class="input" type="text" [formControl]="searchControl" placeholder="Search tasks..."/>
+      </div>
+      <div class="column is-3">
+        <div class="select is-fullwidth">
+          <select [formControl]="filterControl">
+            <option value="all">All Tasks</option>
+            <option value="done">Completed</option>
+            <option value="pending">Pending</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  @for (task of filteredTasks; track $index) {
     <article class="message is-dark" [class.is-success]="task.done">
       <div class="message-header">
         <button class="button is-small is-dark" [class.is-success]="task.done" (click)="markDone($index)">
@@ -44,8 +61,10 @@
         <p>{{ task.title }}</p>
         <button class="delete" aria-label="delete" (click)="delete($index)"></button>
       </div>
-      <div class="message-body">{{ task.description }}</div>
-      <small class="is-size-7 has-text-grey">Added: {{ task.createdAt }}</small>
+      <div class="message-body">
+        <p>{{ task.description }}</p>
+        <p class="is-size-7 has-text-grey">Added: {{ task.createdAt }}</p>
+      </div>
     </article>
   }
 </div>

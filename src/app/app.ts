@@ -18,6 +18,9 @@ export class App {
   protected readonly title = signal('angular-todo');
 
   form: FormGroup;
+  searchControl = new FormControl('');
+  filterControl = new FormControl('all');
+
   tasks: Task[] = [];
 
   get f() {
@@ -56,6 +59,27 @@ export class App {
     let task = this.tasks[index];
     task.done = !task.done;
     this.updateLocalStorage();
+  }
+
+  get filteredTasks(): Task[] {
+    let filtered = this.tasks;
+
+    const searchTerm = this.searchControl.value?.toLowerCase() || '';
+    if (searchTerm) {
+      filtered = filtered.filter(task =>
+        task.title.toLowerCase().includes(searchTerm) ||
+        task.description.toLowerCase().includes(searchTerm)
+      );
+    }
+
+    const filter = this.filterControl.value;
+    if (filter === 'done') {
+      filtered = filtered.filter(task => task.done);
+    } else if (filter === 'pending') {
+      filtered = filtered.filter(task => !task.done);
+    }
+
+    return filtered;
   }
 
   private updateLocalStorage() {
